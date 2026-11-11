@@ -4,20 +4,33 @@ using UniversityDbApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// MVC жүйесін қосу
 builder.Services.AddControllersWithViews();
 
-// SQL Server дерекқорына қосылу
 var connectionString =
     builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
+        "SQL Server connection string is not configured."
+    );
+}
 
-// Қосымшаны құрастыру
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(connectionString)
+);
+
 var app = builder.Build();
 
-// HTTP сұраныстарын өңдеу
+// EF Core миграцияларын автоматты қолдану
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var dbContext =
+        scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    await dbContext.Database.MigrateAsync();
+}
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -31,9 +44,10 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-// Басты маршрут
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}"
+);
 
 app.Run();
+
