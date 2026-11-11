@@ -1,0 +1,40 @@
+
+name: Create EF Core Migration
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  migration:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Install .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore UniversityDbApp.csproj
+
+      - name: Install EF Core Tools
+        run: dotnet tool install --global dotnet-ef --version 8.0.0
+
+      - name: Create InitialDb Migration
+        run: dotnet ef migrations add InitialDb --context AppDbContext --output-dir Data/Migrations
+
+      - name: Save migration to GitHub
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Data/Migrations
+          git commit -m "Add InitialDb EF Core migration"
+          git push
