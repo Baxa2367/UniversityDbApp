@@ -12,38 +12,49 @@ namespace UniversityDbApp.Data
         {
         }
 
-        // Дерекқор кестелері
-        public DbSet<Department> Departments { get; set; }
+        public DbSet<Department> Departments => Set<Department>();
 
-        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Teacher> Teachers => Set<Teacher>();
 
         protected override void OnModelCreating(
             ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Department пен Teacher арасындағы байланыс
             modelBuilder.Entity<Department>()
                 .HasMany(d => d.Teachers)
                 .WithOne(t => t.Department)
                 .HasForeignKey(t => t.DepartmentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Department атауы міндетті
             modelBuilder.Entity<Department>()
                 .Property(d => d.Name)
                 .IsRequired()
                 .HasMaxLength(100);
 
-            // Teacher электрондық поштасы міндетті
+            modelBuilder.Entity<Department>()
+                .Property(d => d.Description)
+                .HasMaxLength(500);
+
+            modelBuilder.Entity<Teacher>()
+                .Property(t => t.FullName)
+                .IsRequired()
+                .HasMaxLength(150);
+
             modelBuilder.Entity<Teacher>()
                 .Property(t => t.Email)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(256);
 
-            // Электрондық пошта қайталанбауы керек
             modelBuilder.Entity<Teacher>()
                 .HasIndex(t => t.Email)
                 .IsUnique();
+
+            modelBuilder.Entity<Teacher>()
+                .Property(t => t.Position)
+                .HasMaxLength(100);
         }
     }
+}
+
 }
