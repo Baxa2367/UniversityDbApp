@@ -13,15 +13,15 @@ namespace UniversityDbApp.Models
 
         [Required]
         [EmailAddress]
+        [StringLength(256)]
         public string Email { get; set; } = string.Empty;
 
         [StringLength(100)]
         public string? Position { get; set; }
 
-        // Foreign Key
         public int DepartmentId { get; set; }
 
-        // Навигациялық қасиет
         public Department Department { get; set; } = null!;
     }
 }
+
