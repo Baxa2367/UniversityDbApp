@@ -1,0 +1,53 @@
+
+@model Department
+
+@{
+    ViewData["Title"] = "Кафедраны өңдеу";
+}
+
+<div class="page-heading">
+    <div>
+        <h1>Кафедраны өңдеу</h1>
+        <p>Тіркелген кафедраның мәліметтерін жаңарту</p>
+    </div>
+    <a asp-action="Index" class="back-button">← Артқа</a>
+</div>
+
+<div class="form-card">
+    <div class="form-card-header">
+        <div class="form-icon">✎</div>
+        <div>
+            <h2>Кафедра №@Model.Id</h2>
+            <p>Өзгерістерді енгізіп, сақтаңыз</p>
+        </div>
+    </div>
+
+    <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+        <div class="form-group">
+            <label asp-for="Name">Кафедра атауы <span>*</span></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="field-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description">Сипаттамасы</label>
+            <textarea asp-for="Description"
+                      class="form-control"
+                      rows="5"></textarea>
+            <span asp-validation-for="Description" class="field-error"></span>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="Index" class="cancel-button">Болдырмау</a>
+            <button type="submit" class="submit-button">Өзгерістерді сақтау</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
