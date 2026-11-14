@@ -1,1 +1,74 @@
 
+
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - University Management</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">U</div>
+                <div>
+                    <strong>UniManage</strong>
+                    <small>University System</small>
+                </div>
+            </div>
+
+            <div class="nav-label">БАСТЫ МӘЗІР</div>
+
+            <a class="nav-link active" asp-controller="Home" asp-action="Index">
+                <span>⌂</span> Басты бет
+            </a>
+
+            <div class="nav-label">БАСҚАРУ</div>
+
+            <a class="nav-link" href="#">
+                <span>▦</span> Кафедралар
+            </a>
+
+            <a class="nav-link" href="#">
+                <span>♙</span> Оқытушылар
+            </a>
+
+            <div class="sidebar-bottom">
+                <div class="system-status">
+                    <span class="status-dot"></span>
+                    Жүйе белсенді
+                </div>
+                <small>ASP.NET Core 8</small>
+            </div>
+        </aside>
+
+        <main class="main">
+            <header class="topbar">
+                <div>
+                    <span class="breadcrumb">University / Dashboard</span>
+                    <h2>@ViewData["Title"]</h2>
+                </div>
+                <div class="user">
+                    <div class="avatar">A</div>
+                    <div>
+                        <strong>Administrator</strong>
+                        <small>Басқарушы</small>
+                    </div>
+                </div>
+            </header>
+
+            <section class="content">
+                @RenderBody()
+            </section>
+
+            <footer>
+                University Management System · 2026
+            </footer>
+        </main>
+    </div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
