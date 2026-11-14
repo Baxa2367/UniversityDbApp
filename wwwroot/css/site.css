@@ -345,3 +345,294 @@ footer {
     border-radius: 9px;
     margin-bottom: 20px;
 }
+
+
+/* PAGE HEADING */
+
+.page-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.page-heading h1 {
+    font-size: 27px;
+    margin: 0 0 8px;
+}
+
+.page-heading p {
+    color: #8793a8;
+    margin: 0;
+    font-size: 14px;
+}
+
+.back-button,
+.cancel-button {
+    display: inline-block;
+    padding: 11px 17px;
+    border-radius: 9px;
+    background: white;
+    border: 1px solid #e3e8f1;
+    color: #52617a;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* FORM CARD */
+
+.form-card {
+    background: white;
+    border: 1px solid #e8ebf2;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 760px;
+    box-shadow: 0 5px 20px rgba(20, 35, 65, .035);
+}
+
+.form-card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 23px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.form-icon {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    background: #eaf0ff;
+    color: #4778ed;
+    border-radius: 12px;
+    font-size: 25px;
+}
+
+.form-card-header h2 {
+    margin: 0 0 6px;
+    font-size: 19px;
+}
+
+.form-card-header p {
+    margin: 0;
+    color: #8793a8;
+    font-size: 13px;
+}
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 9px;
+    font-size: 14px;
+    font-weight: 650;
+}
+
+.form-group label span {
+    color: #e34d4d;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 13px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    color: #172033;
+    background: #fbfcfe;
+    border: 1px solid #dfe5ef;
+    border-radius: 9px;
+    outline: none;
+    transition: border .2s, box-shadow .2s;
+}
+
+.form-control:focus {
+    border-color: #4778ed;
+    box-shadow: 0 0 0 3px rgba(71, 120, 237, .12);
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 110px;
+}
+
+.form-note {
+    color: #8793a8;
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+.form-note strong {
+    color: #e34d4d;
+}
+
+.field-error {
+    display: block;
+    color: #d64545;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.validation-summary {
+    color: #b52e2e;
+    background: #fff1f1;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 18px;
+}
+
+.validation-summary:empty {
+    display: none;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 25px;
+}
+
+.submit-button,
+.delete-button {
+    border: none;
+    border-radius: 9px;
+    padding: 12px 20px;
+    color: white;
+    font-weight: 650;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.submit-button {
+    background: #4778ed;
+}
+
+.submit-button:hover {
+    background: #315fc9;
+}
+
+.cancel-button:hover,
+.back-button:hover {
+    background: #f4f6fb;
+}
+
+/* DELETE CONFIRMATION */
+
+.delete-card {
+    max-width: 650px;
+    padding: 35px;
+    background: white;
+    border: 1px solid #f0dada;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.delete-icon {
+    width: 55px;
+    height: 55px;
+    margin: 0 auto 20px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: #d64545;
+    background: #fff0f0;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.delete-card h2 {
+    font-size: 21px;
+    margin: 0 0 10px;
+}
+
+.delete-description {
+    color: #8793a8;
+    line-height: 1.6;
+}
+
+.delete-details {
+    text-align: left;
+    background: #f8f9fc;
+    border-radius: 10px;
+    padding: 18px;
+    margin: 23px 0;
+}
+
+.delete-details div {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 10px 0;
+    border-bottom: 1px solid #e8ebf2;
+}
+
+.delete-details div:last-child {
+    border-bottom: none;
+}
+
+.delete-details span {
+    color: #8793a8;
+    font-size: 13px;
+}
+
+.delete-details strong {
+    text-align: right;
+    overflow-wrap: anywhere;
+    font-size: 13px;
+}
+
+.delete-warning {
+    text-align: left;
+    background: #fff8e9;
+    color: #92651c;
+    padding: 14px;
+    border-radius: 9px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.delete-button {
+    background: #dc5050;
+}
+
+.delete-button:hover {
+    background: #bc3838;
+}
+
+@media (max-width: 700px) {
+    .page-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .form-card,
+    .delete-card {
+        padding: 20px;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .form-actions a,
+    .form-actions button {
+        text-align: center;
+        width: 100%;
+    }
+
+    .delete-details div {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .delete-details strong {
+        text-align: left;
+    }
+}
+
