@@ -1,0 +1,58 @@
+
+@model Department
+
+@{
+    ViewData["Title"] = "Кафедра қосу";
+}
+
+<div class="page-heading">
+    <div>
+        <h1>Жаңа кафедра</h1>
+        <p>Университет құрылымына жаңа кафедра тіркеу</p>
+    </div>
+    <a asp-action="Index" class="back-button">← Артқа</a>
+</div>
+
+<div class="form-card">
+    <div class="form-card-header">
+        <div class="form-icon">＋</div>
+        <div>
+            <h2>Кафедра туралы ақпарат</h2>
+            <p>Төмендегі мәліметтерді толтырыңыз</p>
+        </div>
+    </div>
+
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+        <div class="form-group">
+            <label asp-for="Name">Кафедра атауы <span>*</span></label>
+            <input asp-for="Name"
+                   class="form-control"
+                   placeholder="Мысалы: Ақпараттық жүйелер" />
+            <span asp-validation-for="Name" class="field-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description">Сипаттамасы</label>
+            <textarea asp-for="Description"
+                      class="form-control"
+                      rows="5"
+                      placeholder="Кафедраның қызметі мен бағытын сипаттаңыз"></textarea>
+            <span asp-validation-for="Description" class="field-error"></span>
+        </div>
+
+        <div class="form-note">
+            <strong>*</strong> белгісімен көрсетілген өрістер міндетті.
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="Index" class="cancel-button">Болдырмау</a>
+            <button type="submit" class="submit-button">Кафедраны сақтау</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
