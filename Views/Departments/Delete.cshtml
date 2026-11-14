@@ -1,0 +1,55 @@
+
+@model Department
+
+@{
+    ViewData["Title"] = "Кафедраны жою";
+}
+
+<div class="page-heading">
+    <div>
+        <h1>Кафедраны жою</h1>
+        <p>Таңдалған кафедраны жою әрекетін растаңыз</p>
+    </div>
+    <a asp-action="Index" class="back-button">← Артқа</a>
+</div>
+
+<div class="delete-card">
+    <div class="delete-icon">!</div>
+
+    <h2>Кафедраны жоюға сенімдісіз бе?</h2>
+
+    <p class="delete-description">
+        Бұл әрекетті орындамас бұрын кафедра мәліметтерін тексеріңіз.
+    </p>
+
+    <div class="delete-details">
+        <div>
+            <span>Кафедра ID</span>
+            <strong>@Model.Id</strong>
+        </div>
+
+        <div>
+            <span>Кафедра атауы</span>
+            <strong>@Model.Name</strong>
+        </div>
+
+        <div>
+            <span>Сипаттамасы</span>
+            <strong>@(Model.Description ?? "Көрсетілмеген")</strong>
+        </div>
+    </div>
+
+    <div class="delete-warning">
+        Ескерту: кафедраға байланыстырылған оқытушылар болса,
+        жүйе кафедраны жоюға рұқсат бермейді.
+    </div>
+
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+        <div class="form-actions">
+            <a asp-action="Index" class="cancel-button">Болдырмау</a>
+            <button type="submit" class="delete-button">
+                Иә, жою
+            </button>
+        </div>
+    </form>
+</div>
