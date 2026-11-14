@@ -636,3 +636,35 @@ textarea.form-control {
     }
 }
 
+
+.dashboard-card {
+    display: block;
+    padding: 25px;
+    background: white;
+    border: 1px solid #e8ebf2;
+    border-radius: 14px;
+    text-decoration: none;
+    color: #172033;
+    transition: .2s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    border-color: #4778ed;
+    box-shadow: 0 10px 25px rgba(20, 35, 65, .08);
+}
+
+.dashboard-card h3 {
+    margin: 10px 0;
+}
+
+.dashboard-card p {
+    color: #8793a8;
+}
+
+.dashboard-card span {
+    color: #4778ed;
+    font-size: 13px;
+    font-weight: 650;
+}
+
