@@ -1,0 +1,79 @@
+
+@model IEnumerable<Department>
+
+@{
+    ViewData["Title"] = "Кафедралар";
+}
+
+<div class="welcome">
+    <h1>Кафедралар</h1>
+    <p>Университет кафедраларының тізімі мен басқару панелі.</p>
+</div>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+<div class="info-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+        <div>
+            <h3>Барлық кафедралар</h3>
+            <p>Тіркелген кафедралар: @Model.Count()</p>
+        </div>
+
+        <a asp-action="Create" class="action-button">
+            + Кафедра қосу
+        </a>
+    </div>
+
+    <div style="overflow-x:auto; margin-top:20px;">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Кафедра атауы</th>
+                    <th>Сипаттамасы</th>
+                    <th>Әрекеттер</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="4" class="empty-state">
+                            Әзірге кафедралар тіркелмеген.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var department in Model)
+                    {
+                        <tr>
+                            <td>@department.Id</td>
+                            <td><strong>@department.Name</strong></td>
+                            <td>@(department.Description ?? "—")</td>
+                            <td>
+                                <a asp-action="Edit"
+                                   asp-route-id="@department.Id"
+                                   class="table-link">
+                                    Өңдеу
+                                </a>
+
+                                <a asp-action="Delete"
+                                   asp-route-id="@department.Id"
+                                   class="table-link danger">
+                                    Жою
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
