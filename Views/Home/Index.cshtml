@@ -1,37 +1,39 @@
 
 @{
-    ViewData["Title"] = "University Database";
+    ViewData["Title"] = "Басқару панелі";
 }
 
-<div class="container mt-5">
-    <div class="text-center">
-        <h1>University Management System</h1>
+<div class="welcome">
+    <h1>Қош келдіңіз!</h1>
+    <p>
+        Университеттің кафедралары мен оқытушыларын
+        басқару жүйесіне қош келдіңіз.
+    </p>
+</div>
 
-        <p class="lead">
-            Университеттің кафедралары мен оқытушыларын
-            басқару жүйесі.
-        </p>
+<div class="stats">
+    <div class="stat-card">
+        <div class="stat-icon">▦</div>
+        <h3>Кафедралар</h3>
+        <p>Department</p>
+    </div>
 
-        <hr />
-
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <div class="card p-4 shadow-sm">
-                    <h3>Department</h3>
-                    <p>Университет кафедралары туралы ақпарат.</p>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card p-4 shadow-sm">
-                    <h3>Teacher</h3>
-                    <p>Оқытушылар туралы ақпарат.</p>
-                </div>
-            </div>
-        </div>
-
-        <p class="mt-4 text-muted">
-            ASP.NET Core 8 | Entity Framework Core
-        </p>
+    <div class="stat-card">
+        <div class="stat-icon">♙</div>
+        <h3>Оқытушылар</h3>
+        <p>Teacher</p>
     </div>
 </div>
+
+<div class="info-panel">
+    <h3>University Management System</h3>
+    <p>
+        Бұл жүйе университет кафедралары мен оқытушылары
+        туралы ақпаратты бір орталықтан басқаруға арналған.
+    </p>
+    <p>
+        Технологиялар: ASP.NET Core 8, Entity Framework Core,
+        Microsoft SQL Server.
+    </p>
+</div>
+
