@@ -3,109 +3,235 @@
 
 @{
     ViewData["Title"] = "Оқытушылар";
+
+    var teachers = Model.ToList();
+    var departmentCount = teachers
+        .Where(t => t.Department != null)
+        .Select(t => t.Department.Name)
+        .Distinct()
+        .Count();
+
+    var positionCount = teachers
+        .Where(t => !string.IsNullOrWhiteSpace(t.Position))
+        .Select(t => t.Position)
+        .Distinct()
+        .Count();
+
+    var departments = teachers
+        .Where(t => t.Department != null)
+        .Select(t => t.Department.Name)
+        .Distinct()
+        .OrderBy(n => n)
+        .ToList();
 }
 
-<div class="container-fluid py-4">
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="fw-bold mb-1">Оқытушылар</h2>
-            <p class="text-muted mb-0">
-                Университет оқытушыларының деректер базасы
-            </p>
-        </div>
-
-        <a asp-action="Create" class="btn btn-primary">
-            + Оқытушы қосу
-        </a>
+<div class="page-heading">
+    <div>
+        <h1>Оқытушылар</h1>
+        <p>Университеттің профессорлық-оқытушылық құрамы және олардың мәліметтері</p>
     </div>
 
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show">
-            @TempData["Success"]
-            <button type="button" class="btn-close"
-                    data-bs-dismiss="alert"></button>
-        </div>
-    }
-
-    <div class="card border-0 shadow-sm">
-        <div class="card-body">
-
-            @if (Model.Any())
-            {
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>№</th>
-                                <th>Аты-жөні</th>
-                                <th>Email</th>
-                                <th>Лауазымы</th>
-                                <th>Кафедрасы</th>
-                                <th class="text-end">Әрекеттер</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @{
-                                int number = 1;
-                            }
-
-                            @foreach (var teacher in Model)
-                            {
-                                <tr>
-                                    <td>@number</td>
-                                    <td class="fw-semibold">
-                                        @teacher.FullName
-                                    </td>
-                                    <td>@teacher.Email</td>
-                                    <td>
-                                        @(teacher.Position ?? "Көрсетілмеген")
-                                    </td>
-                                    <td>
-                                        @(teacher.Department?.Name ?? "Белгісіз")
-                                    </td>
-                                    <td class="text-end">
-                                        <a asp-action="Edit"
-                                           asp-route-id="@teacher.Id"
-                                           class="btn btn-sm btn-outline-primary">
-                                            Өңдеу
-                                        </a>
-
-                                        <a asp-action="Delete"
-                                           asp-route-id="@teacher.Id"
-                                           class="btn btn-sm btn-outline-danger">
-                                            Жою
-                                        </a>
-                                    </td>
-                                </tr>
-
-                                number++;
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            }
-            else
-            {
-                <div class="text-center py-5">
-                    <h5>Оқытушылар әлі тіркелмеген</h5>
-                    <p class="text-muted">
-                        Жүйеге алғашқы оқытушыны қосыңыз.
-                    </p>
-                    <a asp-action="Create" class="btn btn-primary">
-                        Оқытушы қосу
-                    </a>
-                </div>
-            }
-
-        </div>
-    </div>
-
-    <div class="mt-3 text-muted">
-        Жалпы оқытушылар саны:
-        <strong>@Model.Count()</strong>
-    </div>
-
+    <a asp-action="Create" class="primary-button">
+        <span>＋</span>
+        Оқытушы қосу
+    </a>
 </div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="success-alert">
+        ✓ @TempData["Success"]
+    </div>
+}
+
+<div class="teacher-stats">
+    <div class="teacher-stat">
+        <div class="teacher-stat-icon">♙</div>
+        <div>
+            <small>Жалпы оқытушылар</small>
+            <strong>@teachers.Count</strong>
+        </div>
+    </div>
+
+    <div class="teacher-stat">
+        <div class="teacher-stat-icon">▦</div>
+        <div>
+            <small>Кафедра саны</small>
+            <strong>@departmentCount</strong>
+        </div>
+    </div>
+
+    <div class="teacher-stat">
+        <div class="teacher-stat-icon">▤</div>
+        <div>
+            <small>Лауазым түрлері</small>
+            <strong>@positionCount</strong>
+        </div>
+    </div>
+</div>
+
+<div class="table-panel">
+    <div class="table-panel-header">
+        <div>
+            <h3>Оқытушылар тізімі</h3>
+            <p>Жүйеге тіркелген оқытушылар туралы толық ақпарат</p>
+        </div>
+    </div>
+
+    <div class="table-tools">
+        <div class="search-box">
+            <input type="search"
+                   id="teacherSearch"
+                   placeholder="Оқытушының аты-жөні немесе Email бойынша іздеу..." />
+        </div>
+
+        <select id="departmentFilter" class="filter-select">
+            <option value="">Барлық кафедралар</option>
+            @foreach (var department in departments)
+            {
+                <option value="@department">@department</option>
+            }
+        </select>
+    </div>
+
+    <div class="table-responsive">
+        <table class="teachers-table">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Оқытушы</th>
+                    <th>Электрондық пошта</th>
+                    <th>Лауазымы</th>
+                    <th>Кафедрасы</th>
+                    <th>Әрекеттер</th>
+                </tr>
+            </thead>
+
+            <tbody id="teachersTableBody">
+                @if (teachers.Any())
+                {
+                    var number = 0;
+
+                    foreach (var teacher in teachers)
+                    {
+                        number++;
+
+                        var initials = string.Join("",
+                            teacher.FullName
+                                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                                .Take(2)
+                                .Select(part => part.Substring(0, 1).ToUpper()));
+
+                        <tr class="teacher-row"
+                            data-search="@($"{teacher.FullName} {teacher.Email}".ToLowerInvariant())"
+                            data-department="@(teacher.Department?.Name ?? "")">
+
+                            <td>@number</td>
+
+                            <td>
+                                <div class="teacher-person">
+                                    <div class="teacher-avatar">
+                                        @initials
+                                    </div>
+                                    <div>
+                                        <strong>@teacher.FullName</strong>
+                                        <small>ID: #@teacher.Id</small>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>@teacher.Email</td>
+
+                            <td>
+                                @(string.IsNullOrWhiteSpace(teacher.Position)
+                                    ? "Көрсетілмеген"
+                                    : teacher.Position)
+                            </td>
+
+                            <td>
+                                <span class="department-badge">
+                                    @(teacher.Department?.Name ?? "Белгісіз")
+                                </span>
+                            </td>
+
+                            <td>
+                                <div class="table-actions">
+                                    <a asp-action="Edit"
+                                       asp-route-id="@teacher.Id"
+                                       class="table-action">
+                                        Өңдеу
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@teacher.Id"
+                                       class="table-action danger">
+                                        Жою
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <div class="empty-state-icon">♙</div>
+                            <h3>Оқытушылар әлі тіркелмеген</h3>
+                            <p>Жүйеге алғашқы оқытушыны қосу арқылы бастаңыз.</p>
+                            <a asp-action="Create" class="primary-button">
+                                ＋ Оқытушы қосу
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-footer">
+        <span id="teacherResultCount">
+            Барлығы: @teachers.Count оқытушы
+        </span>
+        <span>UniManage · Деректер базасы</span>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById("teacherSearch");
+            const departmentFilter = document.getElementById("departmentFilter");
+            const rows = document.querySelectorAll(".teacher-row");
+            const resultCount = document.getElementById("teacherResultCount");
+
+            function filterTeachers() {
+                const search = searchInput.value.toLowerCase().trim();
+                const department = departmentFilter.value;
+
+                let visibleCount = 0;
+
+                rows.forEach(row => {
+                    const searchData = row.dataset.search || "";
+                    const rowDepartment = row.dataset.department || "";
+
+                    const matchesSearch = searchData.includes(search);
+                    const matchesDepartment =
+                        department === "" || rowDepartment === department;
+
+                    const visible = matchesSearch && matchesDepartment;
+
+                    row.style.display = visible ? "" : "none";
+
+                    if (visible) visibleCount++;
+                });
+
+                resultCount.textContent =
+                    `Көрсетілгені: ${visibleCount} / ${rows.length} оқытушы`;
+            }
+
+            searchInput.addEventListener("input", filterTeachers);
+            departmentFilter.addEventListener("change", filterTeachers);
+        });
+    </script>
+}

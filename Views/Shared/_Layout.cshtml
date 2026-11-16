@@ -1,43 +1,51 @@
 
-
 <!DOCTYPE html>
 <html lang="kk">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - University Management</title>
+    <title>@ViewData["Title"] - UniManage</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
+    @{
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    }
+
     <div class="app">
         <aside class="sidebar">
-            <div class="brand">
+            <a class="brand" asp-controller="Home" asp-action="Index">
                 <div class="brand-icon">U</div>
-                <div>
+                <div class="brand-text">
                     <strong>UniManage</strong>
                     <small>University System</small>
                 </div>
-            </div>
-
-            <div class="nav-label">БАСТЫ МӘЗІР</div>
-
-            <a class="nav-link active" asp-controller="Home" asp-action="Index">
-                <span>⌂</span> Басты бет
             </a>
 
-            <div class="nav-label">БАСҚАРУ</div>
+            <nav class="sidebar-nav">
+                <div class="nav-label">БАСТЫ МӘЗІР</div>
 
-            <a class="nav-link" asp-controller="Departments" asp-action="Index">
-    <span>▦</span> Кафедралар
-</a>
+                <a class="nav-link @(currentController == "Home" ? "active" : "")"
+                   asp-controller="Home" asp-action="Index">
+                    <span class="nav-icon">⌂</span>
+                    <span>Басты бет</span>
+                </a>
 
-            <li class="nav-item">
-    <a class="nav-link"
-       asp-controller="Teachers"
-       asp-action="Index">
-        Оқытушылар
-    </a>
-</li>
+                <div class="nav-label">БАСҚАРУ</div>
+
+                <a class="nav-link @(currentController == "Departments" ? "active" : "")"
+                   asp-controller="Departments" asp-action="Index">
+                    <span class="nav-icon">▦</span>
+                    <span>Кафедралар</span>
+                </a>
+
+                <a class="nav-link @(currentController == "Teachers" ? "active" : "")"
+                   asp-controller="Teachers" asp-action="Index">
+                    <span class="nav-icon">♙</span>
+                    <span>Оқытушылар</span>
+                </a>
+            </nav>
 
             <div class="sidebar-bottom">
                 <div class="system-status">
@@ -50,13 +58,14 @@
 
         <main class="main">
             <header class="topbar">
-                <div>
-                    <span class="breadcrumb">University / Dashboard</span>
+                <div class="topbar-heading">
+                    <span class="breadcrumb">University / @ViewData["Title"]</span>
                     <h2>@ViewData["Title"]</h2>
                 </div>
+
                 <div class="user">
                     <div class="avatar">A</div>
-                    <div>
+                    <div class="user-info">
                         <strong>Administrator</strong>
                         <small>Басқарушы</small>
                     </div>
@@ -67,8 +76,9 @@
                 @RenderBody()
             </section>
 
-            <footer>
-                University Management System · 2026
+            <footer class="footer">
+                <span>University Management System</span>
+                <span>© 2026 UniManage</span>
             </footer>
         </main>
     </div>
