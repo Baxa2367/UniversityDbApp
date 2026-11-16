@@ -1,0 +1,99 @@
+
+@model UniversityDbApp.Models.Teacher
+
+@{
+    ViewData["Title"] = "Оқытушыны өңдеу";
+}
+
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h2 class="fw-bold">Оқытушы мәліметтерін өңдеу</h2>
+        <p class="text-muted">
+            Қажетті ақпаратты өзгертіп, сақтаңыз.
+        </p>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+
+            <form asp-action="Edit"
+                  asp-route-id="@Model.Id"
+                  method="post">
+
+                <input type="hidden" asp-for="Id" />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="FullName" class="form-label">
+                        Аты-жөні
+                    </label>
+
+                    <input asp-for="FullName" class="form-control" />
+
+                    <span asp-validation-for="FullName"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">
+                        Электрондық пошта
+                    </label>
+
+                    <input asp-for="Email"
+                           type="email"
+                           class="form-control" />
+
+                    <span asp-validation-for="Email"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Position" class="form-label">
+                        Лауазымы
+                    </label>
+
+                    <input asp-for="Position" class="form-control" />
+
+                    <span asp-validation-for="Position"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="DepartmentId" class="form-label">
+                        Кафедра
+                    </label>
+
+                    <select asp-for="DepartmentId"
+                            asp-items="ViewBag.DepartmentId"
+                            class="form-select">
+                        <option value="">Кафедраны таңдаңыз</option>
+                    </select>
+
+                    <span asp-validation-for="DepartmentId"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        Өзгерістерді сақтау
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-outline-secondary">
+                        Болдырмау
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
