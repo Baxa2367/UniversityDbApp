@@ -6,21 +6,33 @@
 }
 
 <div class="container py-4">
-
     <div class="mb-4">
         <h2 class="fw-bold">Жаңа оқытушы қосу</h2>
         <p class="text-muted">
-            Оқытушы туралы ақпаратты толтырыңыз.
+            Оқытушының жеке және қызметтік мәліметтерін енгізіңіз.
         </p>
     </div>
 
     <div class="card border-0 shadow-sm">
         <div class="card-body p-4">
 
-            <form asp-action="Create" method="post">
+            <div asp-validation-summary="All"
+                 class="alert alert-danger"
+                 role="alert">
+            </div>
 
-                <div asp-validation-summary="ModelOnly"
-                     class="text-danger mb-3"></div>
+            @if (ViewBag.HasDepartments == false)
+            {
+                <div class="alert alert-warning">
+                    Жүйеде кафедралар жоқ.
+                    Алдымен «Кафедралар» бөліміне кіріп,
+                    кафедра қосыңыз.
+                </div>
+            }
+
+            <form asp-controller="Teachers"
+                  asp-action="Create"
+                  method="post">
 
                 <div class="mb-3">
                     <label asp-for="FullName" class="form-label">
@@ -32,7 +44,8 @@
                            placeholder="Мысалы: Ахметов Нұрлан Ерланұлы" />
 
                     <span asp-validation-for="FullName"
-                          class="text-danger"></span>
+                          class="text-danger">
+                    </span>
                 </div>
 
                 <div class="mb-3">
@@ -46,7 +59,8 @@
                            placeholder="teacher@university.kz" />
 
                     <span asp-validation-for="Email"
-                          class="text-danger"></span>
+                          class="text-danger">
+                    </span>
                 </div>
 
                 <div class="mb-3">
@@ -59,7 +73,8 @@
                            placeholder="Мысалы: Аға оқытушы" />
 
                     <span asp-validation-for="Position"
-                          class="text-danger"></span>
+                          class="text-danger">
+                    </span>
                 </div>
 
                 <div class="mb-4">
@@ -70,15 +85,18 @@
                     <select asp-for="DepartmentId"
                             asp-items="ViewBag.DepartmentId"
                             class="form-select">
-                        <option value="">Кафедраны таңдаңыз</option>
+                        <option value="0">Кафедраны таңдаңыз</option>
                     </select>
 
                     <span asp-validation-for="DepartmentId"
-                          class="text-danger"></span>
+                          class="text-danger">
+                    </span>
                 </div>
 
                 <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit"
+                            class="btn btn-primary"
+                            disabled="@(ViewBag.HasDepartments == false)">
                         Сақтау
                     </button>
 
@@ -87,12 +105,9 @@
                         Артқа қайту
                     </a>
                 </div>
-
             </form>
-
         </div>
     </div>
-
 </div>
 
 @section Scripts {

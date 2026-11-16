@@ -16,7 +16,7 @@ namespace UniversityDbApp.Controllers
             _context = context;
         }
 
-        // Барлық оқытушылар тізімі
+        // Оқытушылар тізімі
         public async Task<IActionResult> Index()
         {
             var teachers = await _context.Teachers
@@ -28,24 +28,43 @@ namespace UniversityDbApp.Controllers
             return View(teachers);
         }
 
-        // Жаңа оқытушы қосу беті
+        // Оқытушы қосу беті
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             await LoadDepartments();
             return View();
         }
 
-        // Жаңа оқытушыны сақтау
+        // Оқытушыны сақтау
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Teacher teacher)
         {
-            if (await _context.Teachers.AnyAsync(
-                t => t.Email == teacher.Email))
+            if (!string.IsNullOrWhiteSpace(teacher.Email))
+            {
+                teacher.Email = teacher.Email.Trim();
+
+                bool emailExists = await _context.Teachers
+                    .AnyAsync(t => t.Email == teacher.Email);
+
+                if (emailExists)
+                {
+                    ModelState.AddModelError(
+                        nameof(teacher.Email),
+                        "Бұл электрондық пошта бұрын тіркелген."
+                    );
+                }
+            }
+
+            bool departmentExists = await _context.Departments
+                .AnyAsync(d => d.Id == teacher.DepartmentId);
+
+            if (!departmentExists)
             {
                 ModelState.AddModelError(
-                    "Email",
-                    "Бұл электрондық пошта бұрын тіркелген."
+                    nameof(teacher.DepartmentId),
+                    "Кафедраны дұрыс таңдаңыз."
                 );
             }
 
@@ -55,15 +74,34 @@ namespace UniversityDbApp.Controllers
                 return View(teacher);
             }
 
-            _context.Teachers.Add(teacher);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Teachers.Add(teacher);
+                await _context.SaveChangesAsync();
 
-            TempData["Success"] = "Оқытушы сәтті қосылды.";
+                TempData["Success"] =
+                    "Оқытушы дерекқорға сәтті қосылды.";
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                _context.Entry(teacher).State =
+                    EntityState.Detached;
+
+                ModelState.AddModelError(
+                    string.Empty,
+                    "Дерекқорға сақтау кезінде қате пайда болды. " +
+                    "Енгізілген мәліметтерді тексеріңіз."
+                );
+
+                await LoadDepartments(teacher.DepartmentId);
+                return View(teacher);
+            }
         }
 
-        // Оқытушы мәліметін өңдеу беті
+        // Өңдеу беті
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var teacher = await _context.Teachers.FindAsync(id);
@@ -72,11 +110,10 @@ namespace UniversityDbApp.Controllers
                 return NotFound();
 
             await LoadDepartments(teacher.DepartmentId);
-
             return View(teacher);
         }
 
-        // Оқытушы мәліметін жаңарту
+        // Мәліметтерді жаңарту
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
@@ -91,12 +128,31 @@ namespace UniversityDbApp.Controllers
             if (existingTeacher == null)
                 return NotFound();
 
-            if (await _context.Teachers.AnyAsync(
-                t => t.Email == teacher.Email && t.Id != id))
+            if (!string.IsNullOrWhiteSpace(teacher.Email))
+            {
+                teacher.Email = teacher.Email.Trim();
+
+                bool emailExists = await _context.Teachers
+                    .AnyAsync(t =>
+                        t.Email == teacher.Email && t.Id != id);
+
+                if (emailExists)
+                {
+                    ModelState.AddModelError(
+                        nameof(teacher.Email),
+                        "Бұл электрондық пошта басқа оқытушыға тіркелген."
+                    );
+                }
+            }
+
+            bool departmentExists = await _context.Departments
+                .AnyAsync(d => d.Id == teacher.DepartmentId);
+
+            if (!departmentExists)
             {
                 ModelState.AddModelError(
-                    "Email",
-                    "Бұл электрондық пошта басқа оқытушыға тіркелген."
+                    nameof(teacher.DepartmentId),
+                    "Кафедраны дұрыс таңдаңыз."
                 );
             }
 
@@ -111,14 +167,29 @@ namespace UniversityDbApp.Controllers
             existingTeacher.Position = teacher.Position;
             existingTeacher.DepartmentId = teacher.DepartmentId;
 
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
 
-            TempData["Success"] = "Оқытушы мәліметтері жаңартылды.";
+                TempData["Success"] =
+                    "Оқытушы мәліметтері сәтті жаңартылды.";
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    "Мәліметтерді жаңарту кезінде қате пайда болды."
+                );
+
+                await LoadDepartments(teacher.DepartmentId);
+                return View(teacher);
+            }
         }
 
-        // Оқытушыны жоюды растау беті
+        // Жоюды растау беті
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             var teacher = await _context.Teachers
@@ -131,13 +202,12 @@ namespace UniversityDbApp.Controllers
             return View(teacher);
         }
 
-        // Оқытушыны дерекқордан жою
+        // Оқытушыны жою
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var teacher = await _context.Teachers
-                .FindAsync(id);
+            var teacher = await _context.Teachers.FindAsync(id);
 
             if (teacher == null)
                 return NotFound();
@@ -145,12 +215,13 @@ namespace UniversityDbApp.Controllers
             _context.Teachers.Remove(teacher);
             await _context.SaveChangesAsync();
 
-            TempData["Success"] = "Оқытушы жүйеден жойылды.";
+            TempData["Success"] =
+                "Оқытушы жүйеден сәтті жойылды.";
 
             return RedirectToAction(nameof(Index));
         }
 
-        // Кафедраларды таңдау тізіміне жүктеу
+        // Кафедралар тізімін жүктеу
         private async Task LoadDepartments(int? selectedId = null)
         {
             var departments = await _context.Departments
@@ -164,6 +235,8 @@ namespace UniversityDbApp.Controllers
                 "Name",
                 selectedId
             );
+
+            ViewBag.HasDepartments = departments.Any();
         }
     }
 }
