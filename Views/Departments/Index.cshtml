@@ -1,79 +1,231 @@
 
-@model IEnumerable<Department>
+@model IEnumerable<UniversityDbApp.Models.Department>
 
 @{
     ViewData["Title"] = "Кафедралар";
+
+    var departments = Model.ToList();
+    var describedCount = departments.Count(d =>
+        !string.IsNullOrWhiteSpace(d.Description));
 }
 
-<div class="welcome">
-    <h1>Кафедралар</h1>
-    <p>Университет кафедраларының тізімі мен басқару панелі.</p>
+<div class="page-heading">
+    <div>
+        <h1>Кафедралар</h1>
+        <p>Университеттің құрылымдық бөлімдері мен кафедралары туралы мәліметтер</p>
+    </div>
+
+    <a asp-action="Create" class="primary-button">
+        ＋ Кафедра қосу
+    </a>
 </div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="success-alert">
+        ✓ @TempData["Success"]
+    </div>
+}
 
 @if (TempData["Error"] != null)
 {
-    <div class="alert alert-danger">
-        @TempData["Error"]
+    <div class="department-error-alert">
+        ⚠ @TempData["Error"]
     </div>
 }
 
-<div class="info-panel">
-    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
-        <div>
-            <h3>Барлық кафедралар</h3>
-            <p>Тіркелген кафедралар: @Model.Count()</p>
-        </div>
+<div class="teacher-stats">
 
-        <a asp-action="Create" class="action-button">
-            + Кафедра қосу
-        </a>
+    <div class="teacher-stat">
+        <div class="teacher-stat-icon">▦</div>
+        <div>
+            <small>Жалпы кафедралар</small>
+            <strong>@departments.Count</strong>
+        </div>
     </div>
 
-    <div style="overflow-x:auto; margin-top:20px;">
-        <table class="data-table">
+    <div class="teacher-stat">
+        <div class="teacher-stat-icon">✓</div>
+        <div>
+            <small>Сипаттамасы бар</small>
+            <strong>@describedCount</strong>
+        </div>
+    </div>
+
+    <div class="teacher-stat">
+        <div class="teacher-stat-icon">＋</div>
+        <div>
+            <small>Сипаттамасы жоқ</small>
+            <strong>@(departments.Count - describedCount)</strong>
+        </div>
+    </div>
+
+</div>
+
+<div class="table-panel">
+
+    <div class="table-panel-header">
+        <div>
+            <h3>Кафедралар тізімі</h3>
+            <p>Жүйеде тіркелген барлық кафедралар</p>
+        </div>
+    </div>
+
+    <div class="table-tools">
+        <div class="search-box">
+            <input type="search"
+                   id="departmentSearch"
+                   placeholder="Кафедра атауы немесе сипаттамасы бойынша іздеу..." />
+        </div>
+
+        <span class="department-total">
+            Барлығы: @departments.Count
+        </span>
+    </div>
+
+    <div class="table-responsive">
+        <table class="teachers-table">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>№</th>
                     <th>Кафедра атауы</th>
                     <th>Сипаттамасы</th>
+                    <th>ID</th>
                     <th>Әрекеттер</th>
                 </tr>
             </thead>
 
-            <tbody>
-                @if (!Model.Any())
-                {
-                    <tr>
-                        <td colspan="4" class="empty-state">
-                            Әзірге кафедралар тіркелмеген.
-                        </td>
-                    </tr>
-                }
-                else
-                {
-                    @foreach (var department in Model)
-                    {
-                        <tr>
-                            <td>@department.Id</td>
-                            <td><strong>@department.Name</strong></td>
-                            <td>@(department.Description ?? "—")</td>
-                            <td>
-                                <a asp-action="Edit"
-                                   asp-route-id="@department.Id"
-                                   class="table-link">
-                                    Өңдеу
-                                </a>
+            <tbody id="departmentsTableBody">
 
-                                <a asp-action="Delete"
-                                   asp-route-id="@department.Id"
-                                   class="table-link danger">
-                                    Жою
-                                </a>
+                @if (departments.Any())
+                {
+                    var number = 0;
+
+                    foreach (var department in departments)
+                    {
+                        number++;
+
+                        <tr class="department-row"
+                            data-search="@($"{department.Name} {department.Description}".ToLowerInvariant())">
+
+                            <td>@number</td>
+
+                            <td>
+                                <div class="department-person">
+                                    <div class="department-avatar">▦</div>
+
+                                    <div>
+                                        <strong>@department.Name</strong>
+                                        <small>Университет кафедрасы</small>
+                                    </div>
+                                </div>
                             </td>
+
+                            <td>
+                                <div class="department-description">
+                                    @(string.IsNullOrWhiteSpace(department.Description)
+                                        ? "Сипаттама енгізілмеген"
+                                        : department.Description)
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="department-id">
+                                    #@department.Id
+                                </span>
+                            </td>
+
+                            <td>
+                                <div class="table-actions">
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@department.Id"
+                                       class="table-action">
+                                        Өңдеу
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@department.Id"
+                                       class="table-action danger">
+                                        Жою
+                                    </a>
+
+                                </div>
+                            </td>
+
                         </tr>
                     }
                 }
+                else
+                {
+                    <tr>
+                        <td colspan="5">
+                            <div class="department-empty-state">
+                                <div class="department-empty-icon">▦</div>
+
+                                <h3>Кафедралар әлі тіркелмеген</h3>
+
+                                <p>
+                                    Университеттің алғашқы кафедрасын
+                                    жүйеге қосу арқылы бастаңыз.
+                                </p>
+
+                                <a asp-action="Create" class="primary-button">
+                                    ＋ Бірінші кафедраны қосу
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
             </tbody>
         </table>
     </div>
+
+    <div class="table-footer">
+        <span id="departmentResultCount">
+            Барлығы: @departments.Count кафедра
+        </span>
+
+        <span>UniManage · Кафедралар</span>
+    </div>
+
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput =
+                document.getElementById("departmentSearch");
+
+            const rows =
+                document.querySelectorAll(".department-row");
+
+            const resultCount =
+                document.getElementById("departmentResultCount");
+
+            function filterDepartments() {
+                const search =
+                    searchInput.value.toLowerCase().trim();
+
+                let visibleCount = 0;
+
+                rows.forEach(row => {
+                    const searchData = row.dataset.search || "";
+                    const visible = searchData.includes(search);
+
+                    row.style.display = visible ? "" : "none";
+
+                    if (visible) {
+                        visibleCount++;
+                    }
+                });
+
+                resultCount.textContent =
+                    `Көрсетілгені: ${visibleCount} / ${rows.length} кафедра`;
+            }
+
+            searchInput.addEventListener("input", filterDepartments);
+        });
+    </script>
+}

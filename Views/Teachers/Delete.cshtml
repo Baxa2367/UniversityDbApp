@@ -5,59 +5,69 @@
     ViewData["Title"] = "Оқытушыны жою";
 }
 
-<div class="container py-4">
-
-    <div class="mb-4">
-        <h2 class="fw-bold text-danger">
-            Оқытушыны жою
-        </h2>
-
-        <p class="text-muted">
-            Бұл әрекетті орындамас бұрын ақпаратты тексеріңіз.
-        </p>
+<div class="page-heading">
+    <div>
+        <h1>Оқытушыны жою</h1>
+        <p>Таңдалған оқытушыны жүйеден жою әрекетін растаңыз</p>
     </div>
 
-    <div class="card border-0 shadow-sm">
-        <div class="card-body p-4">
+    <a asp-action="Index" class="back-button">← Артқа</a>
+</div>
 
-            <div class="alert alert-warning">
-                Бұл оқытушыны дерекқордан жойғыңыз келетініне сенімдісіз бе?
-            </div>
+<div class="delete-card">
+    <div class="delete-icon">!</div>
 
-            <dl class="row">
-                <dt class="col-sm-3">Аты-жөні</dt>
-                <dd class="col-sm-9">@Model.FullName</dd>
+    <h2>Оқытушыны жоюға сенімдісіз бе?</h2>
 
-                <dt class="col-sm-3">Email</dt>
-                <dd class="col-sm-9">@Model.Email</dd>
+    <p class="delete-description">
+        Бұл әрекет оқытушының деректерін дерекқордан жояды.
+        Жалғастырмас бұрын мәліметтерді тексеріңіз.
+    </p>
 
-                <dt class="col-sm-3">Лауазымы</dt>
-                <dd class="col-sm-9">
-                    @(Model.Position ?? "Көрсетілмеген")
-                </dd>
+    <div class="delete-details">
+        <div>
+            <span>Оқытушы ID</span>
+            <strong>#@Model.Id</strong>
+        </div>
 
-                <dt class="col-sm-3">Кафедрасы</dt>
-                <dd class="col-sm-9">
-                    @(Model.Department?.Name ?? "Белгісіз")
-                </dd>
-            </dl>
+        <div>
+            <span>Аты-жөні</span>
+            <strong>@Model.FullName</strong>
+        </div>
 
-            <form asp-action="Delete"
-                  asp-route-id="@Model.Id"
-                  method="post">
+        <div>
+            <span>Электрондық пошта</span>
+            <strong>@Model.Email</strong>
+        </div>
 
-                <button type="submit" class="btn btn-danger">
-                    Иә, жою
-                </button>
+        <div>
+            <span>Лауазымы</span>
+            <strong>@(Model.Position ?? "Көрсетілмеген")</strong>
+        </div>
 
-                <a asp-action="Index"
-                   class="btn btn-outline-secondary">
-                    Болдырмау
-                </a>
-
-            </form>
-
+        <div>
+            <span>Кафедрасы</span>
+            <strong>@(Model.Department?.Name ?? "Белгісіз")</strong>
         </div>
     </div>
 
+    <div class="delete-warning">
+        Ескерту: жою әрекетін растағаннан кейін оқытушының
+        мәліметтері дерекқордан жойылады.
+    </div>
+
+    <form asp-action="Delete"
+          asp-route-id="@Model.Id"
+          method="post">
+
+        <div class="form-actions">
+            <a asp-action="Index" class="cancel-button">
+                Болдырмау
+            </a>
+
+            <button type="submit" class="delete-button">
+                Иә, жою
+            </button>
+        </div>
+    </form>
 </div>

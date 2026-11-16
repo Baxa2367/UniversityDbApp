@@ -3,45 +3,113 @@
     ViewData["Title"] = "Басқару панелі";
 }
 
-<div class="welcome">
-    <h1>Қош келдіңіз!</h1>
-    <p>
-        Университеттің кафедралары мен оқытушыларын
-        басқару жүйесіне қош келдіңіз.
-    </p>
+<div class="dashboard-hero">
+    <div class="dashboard-hero-content">
+        <span class="dashboard-eyebrow">UNIVERSITY MANAGEMENT SYSTEM</span>
+
+        <h1>Қош келдіңіз!</h1>
+
+        <p>
+            UniManage — университеттің кафедралары мен оқытушыларын
+            бір орталықтан басқаруға арналған ақпараттық жүйе.
+            Қажетті бөлімді таңдап, жұмысты бастаңыз.
+        </p>
+
+        <div class="dashboard-hero-actions">
+            <a asp-controller="Departments"
+               asp-action="Index"
+               class="primary-button">
+                Кафедраларды қарау →
+            </a>
+
+            <a asp-controller="Teachers"
+               asp-action="Index"
+               class="secondary-button">
+                Оқытушылар бөлімі
+            </a>
+        </div>
+    </div>
+
+    <div class="dashboard-hero-decoration">
+        <div class="dashboard-logo-large">U</div>
+        <span>UniManage</span>
+        <small>University System</small>
+    </div>
 </div>
 
+<div class="dashboard-section-heading">
+    <div>
+        <h2>Жүйені басқару</h2>
+        <p>Негізгі бөлімдерге жылдам өту</p>
+    </div>
+</div>
 
-<div class="stats">
+<div class="dashboard-modules">
+
     <a asp-controller="Departments"
        asp-action="Index"
-       class="dashboard-card">
-        <div class="stat-icon">▦</div>
+       class="dashboard-module-card">
+
+        <div class="dashboard-module-top">
+            <div class="dashboard-module-icon">▦</div>
+            <span class="dashboard-module-arrow">↗</span>
+        </div>
+
         <h3>Кафедралар</h3>
-        <p>Кафедраларды басқару</p>
-        <span>Бөлімге өту →</span>
+
+        <p>
+            Университет құрылымындағы кафедраларды тіркеу,
+            олардың сипаттамаларын өзгерту және басқару.
+        </p>
+
+        <div class="dashboard-module-footer">
+            <span>Кафедраларды басқару</span>
+            <strong>→</strong>
+        </div>
     </a>
 
     <a asp-controller="Teachers"
        asp-action="Index"
-       class="dashboard-card">
-        <div class="stat-icon">♙</div>
+       class="dashboard-module-card">
+
+        <div class="dashboard-module-top">
+            <div class="dashboard-module-icon">♙</div>
+            <span class="dashboard-module-arrow">↗</span>
+        </div>
+
         <h3>Оқытушылар</h3>
-        <p>Оқытушыларды басқару</p>
-        <span>Бөлімге өту →</span>
+
+        <p>
+            Оқытушылар туралы ақпаратты сақтау,
+            олардың электрондық поштасы, лауазымы
+            және кафедрамен байланысын басқару.
+        </p>
+
+        <div class="dashboard-module-footer">
+            <span>Оқытушыларды басқару</span>
+            <strong>→</strong>
+        </div>
     </a>
+
 </div>
 
+<div class="dashboard-information">
+    <div class="dashboard-information-icon">i</div>
 
-<div class="info-panel">
-    <h3>University Management System</h3>
-    <p>
-        Бұл жүйе университет кафедралары мен оқытушылары
-        туралы ақпаратты бір орталықтан басқаруға арналған.
-    </p>
-    <p>
-        Технологиялар: ASP.NET Core 8, Entity Framework Core,
-        Microsoft SQL Server.
-    </p>
+    <div>
+        <h3>Жүйе туралы ақпарат</h3>
+
+        <p>
+            UniManage университеттің құрылымдық бөлімдері мен
+            профессорлық-оқытушылық құрамы туралы деректерді
+            орталықтандырылған түрде басқаруға мүмкіндік береді.
+        </p>
+
+        <div class="technology-list">
+            <span>ASP.NET Core 8</span>
+            <span>Entity Framework Core</span>
+            <span>Microsoft SQL Server</span>
+            <span>Code First</span>
+        </div>
+    </div>
 </div>
-
